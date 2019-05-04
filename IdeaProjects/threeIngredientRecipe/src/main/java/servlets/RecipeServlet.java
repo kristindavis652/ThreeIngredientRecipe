@@ -34,27 +34,40 @@ public class RecipeServlet extends HttpServlet {
 
         ResultSet resultSet = null;
         java.sql.Statement statement = null;
+        java.sql.Statement ingredientStatement = null;
         try {
             Connection conn = new DBConnector().getConn();
             statement = conn.createStatement();
-            writer.print("Here is your recipe: ");
+            writer.println("Here is your recipe: ");
             resultSet = statement.executeQuery("SELECT * FROM Recipes WHERE name = '" + recipes + "'");
             while (resultSet.next()) {
                 System.out.println(resultSet.getString("name"));
                 writer.print(resultSet.getString("name"));
             }
-        } catch (SQLException e) {
-            System.out.println(e.getErrorCode());
-        } finally {
-            if (resultSet != null) {
-                try {
-                    resultSet.close();
-                } catch (SQLException sqlEx) {
-                    System.out.println(sqlEx);
+
+            ingredientStatement = conn.createStatement();
+            writer.println("Here are your ingredients: " + ",");
+            resultSet = ingredientStatement.executeQuery("SELECT t1.col, t3.col FROM table1 join table2 ON table1.primarykey = table2.foreignkey join table3 ON table2.primarykey = table3.foreignkey");
+            while (resultSet.next()) {
+                System.out.println(resultSet.getString("name"));
+                writer.print(resultSet.getString("name")); }
+
+            } catch(SQLException e){
+                System.out.println(e.getErrorCode());
+            } finally{
+                if (resultSet != null) {
+                    try {
+                        resultSet.close();
+                    } catch (SQLException sqlEx) {
+                        System.out.println(sqlEx);
+                    }
                 }
+
+
             }
-
-
         }
+
     }
-}
+
+
+
