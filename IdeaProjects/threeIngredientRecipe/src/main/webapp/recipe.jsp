@@ -1,10 +1,9 @@
 <form/"threeIngredientRecipe/recipe" method = "post">
 
 <select name = "recipes">
-  <option value="brownie">Brownie</option>
-  <option value="meatloaf">Meatloaf</option>
-  <option value="sweetPotatoes">Roasted Sweet Potatoes</option>
-  <option value="granola">Granola</option>
+  <option value="Brownies">Brownies</option>
+  <option value="Instant Pot BBQ Chicken">Instant Pot BBQ Chicken</option>
+  <option value="Beer Bread">Beer Bread</option>
 </select>
 <input type="submit" value="Submit">
 </form>
