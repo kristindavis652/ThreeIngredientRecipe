@@ -27,32 +27,43 @@ public class RecipeServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String recipes = request.getParameter("recipes");
+        String ingredients = request.getParameter("ingredients");
+        response.setContentType("text/html");
         response.setContentType("text/html");
 
 
         PrintWriter writer = response.getWriter();
 
         ResultSet resultSet = null;
+        ResultSet ingredientResultSet = null;
         java.sql.Statement statement = null;
         java.sql.Statement ingredientStatement = null;
         try {
             Connection conn = new DBConnector().getConn();
             statement = conn.createStatement();
+            ingredientStatement = conn.createStatement();
             writer.println("Here is your recipe: ");
-            resultSet = statement.executeQuery("SELECT * FROM Recipes WHERE name = '" + recipes + "'");
+            resultSet = statement.executeQuery("SELECT * FROM recipes WHERE name = '" + recipes + "'");
             while (resultSet.next()) {
                 System.out.println(resultSet.getString("name"));
                 writer.print(resultSet.getString("name"));
             }
-
-            ingredientStatement = conn.createStatement();
-            writer.println("Here are your ingredients: " + ",");
-            resultSet = ingredientStatement.executeQuery("SELECT t1.col, t3.col FROM table1 join table2 ON table1.primarykey = table2.foreignkey join table3 ON table2.primarykey = table3.foreignkey");
-            while (resultSet.next()) {
-                System.out.println(resultSet.getString("name"));
-                writer.print(resultSet.getString("name")); }
+            writer.println(" Here are your ingredients: ");
+            System.out.println("Before Query +++++++++++++++++++++++++++++");
+            ingredientResultSet = ingredientStatement.executeQuery(" SELECT r.name as recipes, i.ingredient_name as ingredients " +
+                    "    FROM recipes r " +
+                    "    INNER JOIN recipe_ingredients c ON r.id = c.Recipe_ID " +
+                    "    INNER JOIN ingredients i on c.Ingredient_ID = i.ingredient_id " +
+                    "    WHERE  name = '" + recipes + "'" +
+                    "    ORDER BY r.name ");
+            System.out.println("After Query +++++++++++++++++++++++++++++");
+            while (ingredientResultSet.next()) {
+                System.out.println(ingredientResultSet.getString("ingredients"));
+                writer.print(ingredientResultSet.getString("ingredients"));
+            }
 
             } catch(SQLException e){
+            e.printStackTrace();
                 System.out.println(e.getErrorCode());
             } finally{
                 if (resultSet != null) {
