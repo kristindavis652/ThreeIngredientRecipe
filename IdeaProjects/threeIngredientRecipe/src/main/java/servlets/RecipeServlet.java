@@ -28,6 +28,8 @@ public class RecipeServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String recipes = request.getParameter("recipes");
         String ingredients = request.getParameter("ingredients");
+        String recipeInstructions = request.getParameter("recipeInstructions");
+        response.setContentType("text/html");
         response.setContentType("text/html");
         response.setContentType("text/html");
 
@@ -36,12 +38,15 @@ public class RecipeServlet extends HttpServlet {
 
         ResultSet resultSet = null;
         ResultSet ingredientResultSet = null;
+        ResultSet recipeInstructionsResultSet = null;
         java.sql.Statement statement = null;
         java.sql.Statement ingredientStatement = null;
+        java.sql.Statement recipeInstructionsStatement = null;
         try {
             Connection conn = new DBConnector().getConn();
             statement = conn.createStatement();
             ingredientStatement = conn.createStatement();
+            recipeInstructionsStatement = conn.createStatement();
             writer.println("Here is your recipe: ");
             resultSet = statement.executeQuery("SELECT * FROM recipes WHERE name = '" + recipes + "'");
             while (resultSet.next()) {
@@ -60,6 +65,14 @@ public class RecipeServlet extends HttpServlet {
             while (ingredientResultSet.next()) {
                 System.out.println(ingredientResultSet.getString("ingredients"));
                 writer.print(ingredientResultSet.getString("ingredients"));
+            }
+            writer.println(" Here are the instructions: ");
+            System.out.println("Before Query +++++++++++++++++++++++++++++");
+            recipeInstructionsResultSet = recipeInstructionsStatement.executeQuery(" SELECT * FROM recipes WHERE name = '" + recipes + "'");
+            System.out.println("After Query +++++++++++++++++++++++++++++");
+            while (recipeInstructionsResultSet.next()) {
+                System.out.println(recipeInstructionsResultSet.getString("recipe_instructions"));
+                writer.print(recipeInstructionsResultSet.getString("recipe_instructions"));
             }
 
             } catch(SQLException e){
