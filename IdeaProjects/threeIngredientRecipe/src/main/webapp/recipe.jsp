@@ -1,13 +1,24 @@
 <form/"threeIngredientRecipe/recipe" method = "post">
 
 <!DOCTYPE html>
-
+<head>
 <style>
 body {
-background: linear-gradient(#ac5353, #a65959, #9f6060);
-          background-color: #ac5353;
-          }
-          </style>
+  background-image: url("https://cdn.pixabay.com/photo/2017/06/06/22/46/mediterranean-cuisine-2378758_960_720.jpg");
+  background-repeat: no-repeat;
+  text-align = "center";
+  div.1{
+    max-width:500px;
+    margin: auto;
+    border: 3px solid #73AD21;
+  }
+
+}
+</style>
+</head>
+
+
+<div style="background-color:white">
 
 <h2>Welcome to the Three Ingredient Recipe Site!</h2>
 
@@ -20,18 +31,7 @@ background: linear-gradient(#ac5353, #a65959, #9f6060);
 <input type="submit" value="Submit">
 </form>
 
-<h3>Would you like to enter your own Three Ingredient Recipe?</h3>
-<form>
-  Recipe Title:<br>
-  <input type="text" title="recipeTitle"><br>
-  Ingredient 1:<br>
-  <input type="text" ingredient="ingredientOne"><br>
-  Ingredient 2:<br>
-  <input type="text" ingredient ="ingredientTwo"><br>
-  Ingredient 3:<br>
-  <input type="text" ingredient ="ingredientThree"><br>
-  Instructions:<br>
-  <input type="text" instructions="instructions"><br>
+<p>Or you can <a href="http://localhost:8888/userrecipe">create your own</a> Three Ingredient Recipe.</p>
 
-  <input type="submit" value="Submit">
-</form>
+</div>
+<body>
