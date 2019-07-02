@@ -9,17 +9,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 
+
 public class RecipeServlet extends HttpServlet {
 
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/recipe.jsp");
@@ -27,7 +27,7 @@ public class RecipeServlet extends HttpServlet {
 
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         RecipeData userRecipe = new RecipeData();
 
@@ -35,8 +35,6 @@ public class RecipeServlet extends HttpServlet {
         String recipes = request.getParameter("recipes");
         response.setContentType("text/html");
 
-
-        PrintWriter writer = response.getWriter();
 
         ResultSet resultSet = null;
         ResultSet ingredientResultSet;
@@ -49,16 +47,16 @@ public class RecipeServlet extends HttpServlet {
             ingredientStatement = conn.createStatement();
 
             resultSet = statement.executeQuery("SELECT * FROM recipes WHERE name = '" + recipes + "'");
+
+
             while (resultSet.next()) {
                 userRecipe.setRecipeName(resultSet.getString("name"));
                 userRecipe.setInstructions(resultSet.getString("recipe_instructions"));
-                writer.println("Here is your recipe: ");
-                writer.println(userRecipe.getRecipeName());
-                writer.println(" Here are the instructions: ");
-                writer.print(userRecipe.getInstructions());
 
             }
-            writer.println(" Here are your ingredients: ");
+
+
+
             System.out.println("Before Query +++++++++++++++++++++++++++++");
             ingredientResultSet = ingredientStatement.executeQuery(" SELECT r.name as recipes, i.ingredient_name as ingredients " +
                     "    FROM recipes r " +
@@ -76,26 +74,28 @@ public class RecipeServlet extends HttpServlet {
 
             for(int i = 0; i < ingredients.size(); i++) {
                 System.out.println(ingredients);
-                writer.println(ingredients.get(i) + ",");
             }
 
-            } catch(SQLException e){
+
+
+        } catch(SQLException e){
             e.printStackTrace();
-                System.out.println(e.getErrorCode());
-            } finally{
-                if (resultSet != null) {
-                    try {
-                        resultSet.close();
-                    } catch (SQLException sqlEx) {
-                        System.out.println(sqlEx);
-                    }
+            System.out.println(e.getErrorCode());
+        } finally{
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException sqlEx) {
+                    System.out.println(sqlEx);
                 }
-
-
             }
         }
-
+        request.setAttribute("userRecipe", userRecipe);
+        request.getRequestDispatcher("recipeData.jsp").forward(request, response);
     }
+
+}
+
 
 
 
